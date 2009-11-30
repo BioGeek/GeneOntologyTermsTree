@@ -1,0 +1,7 @@
+A java program that uses an XML file with GO-terms (downloadable on
+http://archive.geneontology.org/latest-full/go_200911-termdb.obo-xml.gz),
+and presents the information in this file as a JTree, that consists of
+- level 1: all terms (<term>) in the file, to be visualized by their name (<name>)
+- level 2: shows below each term the corresponding <is_a> references as subnodes,
+visualized by their GO-identifiers. On double-click on a <is_a> reference the
+corresponding <term> in the JTree is put in focus.
