@@ -53,7 +53,7 @@ public class GeneOntologyTermsTree extends JPanel
     private static String lineStyle = "Horizontal";
     private static boolean useSystemLookAndFeel = false;
     private static Document dom;
-    private static Map myGOTerms = new HashMap();
+    private static Map<String, LinkedList> myGOTerms = new HashMap();
     private static final long serialVersionUID = 7526472295622776147L;
 
     public static class GOTerm {
