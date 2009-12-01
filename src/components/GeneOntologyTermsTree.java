@@ -252,9 +252,9 @@ public class GeneOntologyTermsTree extends JPanel
         LinkedList<String> multipleIs_aReferences = getTextValues(goTermEl, "is_a");
 
         //Create a new GOTerm with the value read from the xml nodes
-        GOTerm t = new GOTerm(id, name, multipleIs_aReferences);
+        GOTerm term = new GOTerm(id, name, multipleIs_aReferences);
 
-        return t;
+        return term;
     }
 
     private static void parseDocument() {
@@ -270,12 +270,12 @@ public class GeneOntologyTermsTree extends JPanel
                 Element el = (Element) nl.item(i);
 
                 //get the GOTerm object
-                GOTerm t = getGOTerm(el);
+                GOTerm term = getGOTerm(el);
 
                 LinkedList value = new LinkedList();
-                value.add(t.getName());
-                value.add(t.getMultipleIs_aReferences());
-                myGOTerms.put(t.getId(), value);
+                value.add(term.getName());
+                value.add(term.getMultipleIs_aReferences());
+                myGOTerms.put(term.getId(), value);
             }
         }
 
