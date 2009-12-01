@@ -49,7 +49,7 @@ public class GeneOntologyTermsTree extends JPanel
         implements TreeSelectionListener {
 
     private JTree tree;
-    private static boolean DEBUG = false;
+    private static boolean DEBUG = true;
     private static String lineStyle = "Horizontal";
     private static boolean useSystemLookAndFeel = false;
     private static Document dom;
@@ -143,6 +143,9 @@ public class GeneOntologyTermsTree extends JPanel
         }
 
         Object nodeInfo = node.getUserObject();
+        if (nodeInfo == null) {
+            return;
+        }
         if (node.isLeaf()) {
 
             // put in focus
@@ -153,7 +156,7 @@ public class GeneOntologyTermsTree extends JPanel
         }
 
         if (DEBUG) {
-            System.out.println(nodeInfo.toString());
+            System.out.println("NodeInfo: " + nodeInfo.toString());
         }
     }
 
