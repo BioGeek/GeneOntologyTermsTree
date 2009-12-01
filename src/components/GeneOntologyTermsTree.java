@@ -9,14 +9,12 @@
  * visualized by their GO-identifiers. On double-click on a <is_a> reference the
  * corresponding <term> in the JTree is put in focus.
  *
- *  Based on the tutorial found http://java.sun.com/docs/books/tutorial/uiswing/components/tree.html
  */
 package components;
 
 /**
- * This application that requires the following additional files:
- *   GOTerm.java
- *   go_200911-termdb.obo-xml
+ * This application requires the following additional file:
+ *   src/components/go_200911-termdb.obo-xml
  */
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -53,9 +51,62 @@ public class GeneOntologyTermsTree extends JPanel
     private JTree tree;
     private static boolean DEBUG = false;
     private static String lineStyle = "Horizontal";
-    private static boolean useSystemLookAndFeel = true;
+    private static boolean useSystemLookAndFeel = false;
     private static Document dom;
     private static Map myGOTerms = new HashMap();
+    private static final long serialVersionUID = 7526472295622776147L;
+
+    public static class GOTerm {
+
+        private String name;
+        private String id;
+        private LinkedList<String> multipleIs_aReferences = new LinkedList<String>();
+
+        public GOTerm(String id, String name, LinkedList<String> multipleIs_aReferences) {
+            this.id = id;
+            this.name = name;
+            for (String is_a: multipleIs_aReferences) {
+                this.multipleIs_aReferences.add(is_a);
+
+            }
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public LinkedList<String> getMultipleIs_aReferences() {
+            return multipleIs_aReferences;
+        }
+
+        public void setMultipleIs_aReferences(LinkedList<String> multipleIs_aReferences) {
+            this.multipleIs_aReferences = multipleIs_aReferences;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public String toString() {
+            StringBuffer sb = new StringBuffer();
+            sb.append("GO term Details:");
+            sb.append("\nName: " + getName());
+            for (String is_a: multipleIs_aReferences) {
+                sb.append("\nIs a: " + is_a);
+            }
+            return sb.toString();
+
+        }
+    }
 
     public GeneOntologyTermsTree() {
         super(new GridLayout(1, 0));
@@ -122,18 +173,18 @@ public class GeneOntologyTermsTree extends JPanel
     }
 
     private void createNodes(DefaultMutableTreeNode top) {
-        DefaultMutableTreeNode name = null;
-        DefaultMutableTreeNode is_a = null;
+        DefaultMutableTreeNode nameNode = null;
+        DefaultMutableTreeNode is_aNode = null;
 
         Iterator it = myGOTerms.values().iterator();
         while (it.hasNext()) {
-            LinkedList l = (LinkedList) it.next();
-            name = new DefaultMutableTreeNode(l.get(0));
-            top.add(name);
-            LinkedList isas = (LinkedList) l.getLast();
-            for (int i = 0; i < isas.size(); i++) {
-                is_a = new DefaultMutableTreeNode(isas.get(i));
-                name.add(is_a);
+            LinkedList ll = (LinkedList) it.next();
+            nameNode = new DefaultMutableTreeNode(ll.getFirst());
+            top.add(nameNode);
+            LinkedList multipleIs_aReferences = (LinkedList) ll.getLast();
+            for (Object is_a: multipleIs_aReferences) {
+                is_aNode = new DefaultMutableTreeNode(is_a);
+                nameNode.add(is_aNode);
             }
 
         }
@@ -198,10 +249,10 @@ public class GeneOntologyTermsTree extends JPanel
         //id, name and is_a's.
         String id = getTextValue(goTermEl, "id");
         String name = getTextValue(goTermEl, "name");
-        LinkedList<String> isas = getTextValues(goTermEl, "is_a");
+        LinkedList<String> multipleIs_aReferences = getTextValues(goTermEl, "is_a");
 
         //Create a new GOTerm with the value read from the xml nodes
-        GOTerm t = new GOTerm(id, name, isas);
+        GOTerm t = new GOTerm(id, name, multipleIs_aReferences);
 
         return t;
     }
@@ -223,7 +274,7 @@ public class GeneOntologyTermsTree extends JPanel
 
                 LinkedList value = new LinkedList();
                 value.add(t.getName());
-                value.add(t.getIsas());
+                value.add(t.getMultipleIs_aReferences());
                 myGOTerms.put(t.getId(), value);
             }
         }
