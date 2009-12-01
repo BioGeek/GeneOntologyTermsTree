@@ -65,7 +65,7 @@ public class GeneOntologyTermsTree extends JPanel
         public GOTerm(String id, String name, LinkedList<String> multipleIs_aReferences) {
             this.id = id;
             this.name = name;
-            for (String is_a: multipleIs_aReferences) {
+            for (String is_a : multipleIs_aReferences) {
                 this.multipleIs_aReferences.add(is_a);
 
             }
@@ -100,7 +100,7 @@ public class GeneOntologyTermsTree extends JPanel
             StringBuffer sb = new StringBuffer();
             sb.append("GO term Details:");
             sb.append("\nName: " + getName());
-            for (String is_a: multipleIs_aReferences) {
+            for (String is_a : multipleIs_aReferences) {
                 sb.append("\nIs a: " + is_a);
             }
             return sb.toString();
@@ -149,6 +149,7 @@ public class GeneOntologyTermsTree extends JPanel
             String go_id = (String) nodeInfo;
             LinkedList ll = (LinkedList) myGOTerms.get(go_id);
             searchTree(tree, tree.getPathForRow(0), (String) ll.getFirst());
+            tree.scrollPathToVisible(tree.getSelectionPath());
         }
 
         if (DEBUG) {
@@ -182,9 +183,11 @@ public class GeneOntologyTermsTree extends JPanel
             nameNode = new DefaultMutableTreeNode(ll.getFirst());
             top.add(nameNode);
             LinkedList multipleIs_aReferences = (LinkedList) ll.getLast();
-            for (Object is_a: multipleIs_aReferences) {
-                is_aNode = new DefaultMutableTreeNode(is_a);
-                nameNode.add(is_aNode);
+            for (Object is_a : multipleIs_aReferences) {
+                if (is_a != null) {
+                    is_aNode = new DefaultMutableTreeNode(is_a);
+                    nameNode.add(is_aNode);
+                }
             }
 
         }
